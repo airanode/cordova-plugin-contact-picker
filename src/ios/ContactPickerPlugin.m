@@ -1,5 +1,5 @@
 #import "ContactPickerPlugin.h"
-#import "libPhoneNumber-iOS/NBPhoneNumberUtil.h"
+#import "libPhoneNumber_iOS/NBPhoneNumberUtil.h"
 
 @implementation ContactPickerPlugin {
     CNContactPickerViewController* _contactPickerController;
