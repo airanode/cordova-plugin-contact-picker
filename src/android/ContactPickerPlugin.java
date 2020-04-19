@@ -45,6 +45,7 @@ public class ContactPickerPlugin extends ReflectiveCordovaPlugin {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        JSONObject result = new JSONObject();
         if (requestCode == SELECT_CONTACT && this.contactCallback != null) {
             if (resultCode != RESULT_OK) {
                 this.contactCallback.sendPluginResult(
@@ -56,8 +57,8 @@ public class ContactPickerPlugin extends ReflectiveCordovaPlugin {
                         CONTACT_FIELDS_PROJECTION, null, null, null);
                 // If the cursor returned is valid, get the phone number
                 if (cursor != null && cursor.moveToFirst()) {
-                    JSONObject result = new JSONObject();
                     try {
+                        result.put("available", true);
                         for (Map.Entry<String, String> entry : CONTACT_FIELDS_MAP.entrySet()) {
                             int columnIndex = cursor.getColumnIndex(entry.getKey());
                             result.put(entry.getValue(), cursor.getString(columnIndex));
@@ -70,6 +71,12 @@ public class ContactPickerPlugin extends ReflectiveCordovaPlugin {
             }
 
             this.contactCallback = null;
+        } else {
+            try {
+                result.put("available", false);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
